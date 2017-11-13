@@ -184,14 +184,10 @@
                 }
             }).then(function (response) {
                 var values = response.data['Time Series (Daily)'];
-                $('[data-sym="' + stock.sym + '"]')
-                    .closest('tr')
-                    .removeClass('outdated');
+                $('[data-sym="' + stock.sym + '"]').closest('tr').removeClass('outdated');
 
                 if (typeof values === 'undefined') {
-                    $('[data-sym="' + stock.sym + '"]')
-                        .closest('tr')
-                        .addClass('outdated');
+                    $('[data-sym="' + stock.sym + '"]').closest('tr').addClass('outdated');
                     $('.outdated-message').removeClass('hide');
                     console.log(new Date + ': Fetch fallito per ' + stock.name);
                 } else {
