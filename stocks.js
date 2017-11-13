@@ -3,8 +3,6 @@
 
     app.controller('StocksController', function($scope, $http, $interval, $filter) {
         portfolio = this;
-        portfolio.foundStocks = [];
-        portfolio.history = [];
         portfolio.defaultSettings = {
             'apikey': '',
             'marketOpen': 8,
@@ -114,15 +112,17 @@
             portfolio.historyName = name;
             portfolio.history[0] = {
                 day: 'aggiornamento',
-                close: '...',
                 min: 'in',
-                max: 'corso'
+                max: 'corso',
+                close: '...'
             };
 
             $http({
                 method: 'GET',
-                url: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&apikey=' + portfolio.settings.apikey,
+                url: 'https://www.alphavantage.co/query',
                 params: {
+                    'function': 'TIME_SERIES_DAILY_ADJUSTED',
+                    'apikey': portfolio.settings.apikey,
                     'symbol': symbol,
                     'nocache': new Date().getTime()
                 }
@@ -175,8 +175,10 @@
         portfolio.updateStock = function(stock, index) {
             $http({
                 method: 'GET',
-                url: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&apikey=' + portfolio.settings.apikey,
+                url: 'https://www.alphavantage.co/query',
                 params: {
+                    'function': 'TIME_SERIES_DAILY_ADJUSTED',
+                    'apikey': portfolio.settings.apikey,
                     'symbol': stock.sym,
                     'nocache': new Date().getTime()
                 }
@@ -188,9 +190,13 @@
                     .css({'background-color': 'transparent'});
 
                 if (typeof values === 'undefined') {
-                    $('[data-sym="' + stock.sym + '"]').closest('tr').find('td:last').css({'background-color': 'red'});
+                    $('[data-sym="' + stock.sym + '"]')
+                        .closest('tr')
+                        .find('td:last')
+                        .css({'background-color': 'red'});
                     console.log(new Date + ': Fetch fallito per ' + stock.name);
                 } else {
+                    // Make sure that we are seing the last records first...
                     values = Object.keys(values).sort().reverse();
 
                     var max = response.data['Time Series (Daily)'][values[0]]['2. high'];
@@ -205,27 +211,39 @@
                     portfolio.stocks[index].min = min;
                     portfolio.stocks[index].max = max;
                     portfolio.stocks[index].spread = ((max - min) / max * 100).toFixed(2);
-
-                    // Target & Stop Loss notifications
-                    var stopLoss = portfolio.stocks[index].stopLoss;
-                    var target = portfolio.stocks[index].target;
-                    var name = portfolio.stocks[index].name;
-                    if (value <= stopLoss && stopLoss > 0) {
-                        new Audio('assets/stoploss.mp3').play();
-                        stopLoss = parseFloat(stopLoss).toFixed(4);
-                        portfolio.pushNotify(
-                            name + '\nStop loss raggiunto: ' + stopLoss + '\nValore attuale: ' + value, 'stoploss'
-                        );
-                    }
-                    if (value >= target && target > 0) {
-                        new Audio('assets/target.mp3').play();
-                        target = parseFloat(target).toFixed(4);
-                        portfolio.pushNotify(
-                            name + '\nTarget raggiunto: ' + target + '\nValore attuale: ' + value, 'target'
-                        );
-                    }
+                    portfolio.stocks[index].class = portfolio.getAlerts(stock);
                 }
             });
+        };
+
+        portfolio.getAlerts = function(stock) {
+            var style = '';
+            var target = stock.target;
+            var stopLoss = stock.stopLoss;
+
+            if (stock.value >= target && target > 0) {
+                if (stock.class === '') {
+                    new Audio('assets/target.mp3').play();
+                    target = parseFloat(target).toFixed(4);
+                    portfolio.pushNotify(
+                        stock.name + '\nTarget raggiunto: ' + stock.value +
+                        '\nValore impostato: ' + target, 'target'
+                    );
+                }
+                style = 'hasTarget';
+            }
+            if (stock.value <= stopLoss && stopLoss > 0) {
+                if (stock.class === '') {
+                    new Audio('assets/stoploss.mp3').play();
+                    stopLoss = parseFloat(stopLoss).toFixed(4);
+                    portfolio.pushNotify(
+                        stock.name + '\nStop loss raggiunto: ' + stock.value +
+                        '\nValore impostato: ' + stopLoss, 'stoploss'
+                    );
+                }
+                style = 'hasLoss';
+            }
+            return style;
         };
 
         /**
@@ -294,13 +312,13 @@
         }, true);
 
         function setUpdateInterval(time) {
-            $('#progress').remove();
-            $('#progressbar').append('<div style="animation-duration: ' + time + 's" id="progress"></div>');
+            $('.progress').remove();
+            $('.progressbar').append('<div style="animation-duration: ' + time + 's" class="progress"></div>');
             var updateInterval = $interval(function() {
                 var hour = new Date().getHours();
                 if (hour >= portfolio.settings.marketOpen && hour < portfolio.settings.marketClose) {
-                    $('#progress').remove();
-                    $('#progressbar').append('<div style="animation-duration: ' + time + 's" id="progress"></div>');
+                    $('.progress').remove();
+                    $('.progressbar').append('<div style="animation-duration: ' + time + 's" class="progress"></div>');
                     portfolio.updateStocks();
                     setAppStatus('open');
                 } else {
@@ -320,7 +338,7 @@
                     $('.marketInfo').addClass('d-none');
                     break;
                 default:
-                    $('#progress').remove();
+                    $('.progress').remove();
                     $('.logo').attr('src', 'assets/icon_closed.png');
                     $('link[rel*="icon"]').attr('href', 'assets/favicon_closed.ico');
                     $('.marketOpen').addClass('d-none');
@@ -367,6 +385,9 @@
      */
     app.filter('reverse', function() {
         return function(items) {
+            if ($.isEmptyObject(items)) {
+                return null;
+            }
             return items.slice().reverse();
         };
     });

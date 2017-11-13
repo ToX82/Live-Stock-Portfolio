@@ -19,9 +19,9 @@
  */
 .searchStocks {
     width: 100%;
+    box-sizing: border-box;
     border: 1px solid #444;
     background: #FFF;
-    display: block !important;
     position: absolute;
 }
 .searchStocks a {
@@ -47,7 +47,7 @@
     white-space: nowrap;
     text-align: right;
 }
-.table td.symbol {
+.table .symbol {
     text-align: left;
 }
 .table .green {
@@ -56,6 +56,15 @@
 .table .red {
     color: red;
 }
+.table .greenBg {
+    color: #FFF;
+    background: green;
+}
+.table .redBg {
+    color: #FFF;
+    background: green;
+}
+
 .table span[contenteditable] {
     white-space: nowrap;
     display: inline-block;
@@ -66,7 +75,7 @@
 /*
 * Progress bar
  */
-#progressbar {
+.progressbar {
     position: fixed;
     top: 0;
     left: 0;
@@ -75,7 +84,7 @@
     background-color: #555;
     clear: both;
 }
-#progress {
+.progress {
     height: 5px;
     float: left;
     animation-name: progress;
@@ -88,7 +97,7 @@
 @keyframes progress {
 
     from {
-        width: 0%;
+        width: 0;
         background: seagreen;
     }
     to {

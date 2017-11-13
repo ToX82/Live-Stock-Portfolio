@@ -95,11 +95,11 @@
                         <td class="green" ng-class="{red: stock.changeP < 0}">{{stock.changeP}}%</td>
                         <td>{{stock.max}} €<br>{{stock.min}} €</td>
                         <td>{{stock.spread}}%</td>
-                        <td ng-model="stock.target">
+                        <td ng-model="stock.target" ng-class="{greenBg: stock.class === 'hasTarget'}">
                             <span contenteditable ng-model="stock.target">{{stock.target}}</span>
                             <span ng-show="stock.target"> €</span>
                         </td>
-                        <td ng-model="stock.stopLoss">
+                        <td ng-model="stock.stopLoss" ng-class="{redBg: stock.class === 'hasLoss'}">
                             <span contenteditable ng-model="stock.stopLoss">{{stock.stopLoss}}</span>
                             <span ng-show="stock.stopLoss"> €</span>
                         </td>
@@ -206,7 +206,7 @@
             </div>
         </div>
 
-        <div id="progressbar"></div>
+        <div class="progressbar"></div>
 
         <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js/dist/umd/popper.min.js"></script>
