@@ -13,6 +13,9 @@
     top: -20px;
     left: 210px;
 }
+.hide {
+    display: none;
+}
 
 /*
 * Search box
@@ -56,20 +59,26 @@
 .table .red {
     color: red;
 }
-.table .greenBg {
-    color: #FFF;
-    background: green;
-}
-.table .redBg {
-    color: #FFF;
-    background: green;
-}
-
 .table span[contenteditable] {
     white-space: nowrap;
     display: inline-block;
     padding: 10px 5px;
     min-width: 80%;
+}
+
+/*
+* StopLoss & Targets
+ */
+.greenBg {
+    color: #FFF;
+    background: green;
+}
+.redBg {
+    color: #FFF;
+    background: red;
+}
+.outdated {
+    background-color: rgba(198, 52, 52, 0.3);
 }
 
 /*

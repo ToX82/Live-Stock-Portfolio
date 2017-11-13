@@ -186,14 +186,13 @@
                 var values = response.data['Time Series (Daily)'];
                 $('[data-sym="' + stock.sym + '"]')
                     .closest('tr')
-                    .find('td:last')
-                    .css({'background-color': 'transparent'});
+                    .removeClass('outdated');
 
                 if (typeof values === 'undefined') {
                     $('[data-sym="' + stock.sym + '"]')
                         .closest('tr')
-                        .find('td:last')
-                        .css({'background-color': 'red'});
+                        .addClass('outdated');
+                    $('.outdated-message').removeClass('hide');
                     console.log(new Date + ': Fetch fallito per ' + stock.name);
                 } else {
                     // Make sure that we are seing the last records first...
@@ -314,6 +313,7 @@
         function setUpdateInterval(time) {
             $('.progress').remove();
             $('.progressbar').append('<div style="animation-duration: ' + time + 's" class="progress"></div>');
+            $('.outdated-message').addClass('hide');
             var updateInterval = $interval(function() {
                 var hour = new Date().getHours();
                 if (hour >= portfolio.settings.marketOpen && hour < portfolio.settings.marketClose) {
@@ -333,17 +333,17 @@
                 case 'open':
                     $('.logo').attr('src', 'assets/icon.png');
                     $('link[rel*="icon"]').attr('href', 'assets/favicon.ico');
-                    $('.marketOpen').removeClass('d-none');
-                    $('.marketClosed').addClass('d-none');
-                    $('.marketInfo').addClass('d-none');
+                    $('.marketOpen').removeClass('hide');
+                    $('.marketClosed').addClass('hide');
+                    $('.marketInfo').addClass('hide');
                     break;
                 default:
                     $('.progress').remove();
                     $('.logo').attr('src', 'assets/icon_closed.png');
                     $('link[rel*="icon"]').attr('href', 'assets/favicon_closed.ico');
-                    $('.marketOpen').addClass('d-none');
-                    $('.marketClosed').removeClass('d-none');
-                    $('.marketInfo').addClass('d-none');
+                    $('.marketOpen').addClass('hide');
+                    $('.marketClosed').removeClass('hide');
+                    $('.marketInfo').addClass('hide');
                     break;
             }
         }
