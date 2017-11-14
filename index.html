@@ -90,16 +90,26 @@
                             -
                             <a data-toggle="modal" href="#history" ng-click="portfolio.fetchHistory(stock.sym, stock.name)">Storico</a>
                         </td>
-                        <td class="green" ng-class="{red: stock.changeP < 0}">{{stock.value}} €</td>
-                        <td class="green" ng-class="{red: stock.changeP < 0}">{{stock.change}} €</td>
-                        <td class="green" ng-class="{red: stock.changeP < 0}">{{stock.changeP}}%</td>
-                        <td>{{stock.max}} €<br>{{stock.min}} €</td>
-                        <td>{{stock.spread}}%</td>
-                        <td ng-model="stock.target" ng-class="{greenBg: stock.class === 'hasTarget'}">
+                        <td class="green-text" ng-class="{'red-text': stock.changeP < 0}">
+                            {{stock.value}} €
+                        </td>
+                        <td class="green-text" ng-class="{'red-text': stock.changeP < 0}">
+                            {{stock.change}} €
+                        </td>
+                        <td class="green-text" ng-class="{'red-text': stock.changeP < 0}">
+                            {{stock.changeP}}%
+                        </td>
+                        <td>
+                            {{stock.max}} €<br>{{stock.min}} €
+                        </td>
+                        <td>
+                            {{stock.spread}}%
+                        </td>
+                        <td ng-model="stock.target" ng-class="{green: stock.class === 'hasTarget'}">
                             <span contenteditable ng-model="stock.target">{{stock.target}}</span>
                             <span ng-show="stock.target"> €</span>
                         </td>
-                        <td ng-model="stock.stopLoss" ng-class="{redBg: stock.class === 'hasLoss'}">
+                        <td ng-model="stock.stopLoss" ng-class="{red: stock.class === 'hasLoss'}">
                             <span contenteditable ng-model="stock.stopLoss">{{stock.stopLoss}}</span>
                             <span ng-show="stock.stopLoss"> €</span>
                         </td>
@@ -116,10 +126,10 @@
                         <td>
                             <span ng-show="stock.price">{{stock.worth}} €</span>
                         </td>
-                        <td class="green" ng-class="{red: stock.roi < 0}">
+                        <td class="green-text" ng-class="{'red-text': stock.roi < 0}">
                             <span ng-show="stock.price">{{stock.roi}} €</span>
                         </td>
-                        <td class="green" ng-class="{red: stock.roi < 0}">
+                        <td class="green-text" ng-class="{'red-text': stock.roi < 0}">
                             <span ng-show="stock.price">{{stock.roiP}}%</span>
                         </td>
                         <td>
@@ -133,8 +143,8 @@
         <div class="col-10 offset-1 card text-white bg-danger outdated-message hide">
             <div class="card-header">Perché alcune righe sono evidenziate in rosso?</div>
             <div class="card-body">
-                Alcune volte Live stock portfolio non trova dati aggiornati per uno o più
-                titoli. In tal caso, la relativa riga si colora di rosso.
+                Quando la quotazione aggiornata di uno o più
+                titoli non viene trovata, la relativa riga si colora di rosso.
             </div>
         </div>
 

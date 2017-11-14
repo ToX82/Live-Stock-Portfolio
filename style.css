@@ -16,6 +16,16 @@
 .hide {
     display: none;
 }
+.card {
+    zoom: 0.7;
+    opacity: 0.9;
+}
+.card-header {
+    padding: 0.25rem 1.25rem;
+}
+.card-body {
+    padding: 0.5rem 1.25rem;
+}
 
 /*
 * Search box
@@ -53,12 +63,6 @@
 .table .symbol {
     text-align: left;
 }
-.table .green {
-    color: green;
-}
-.table .red {
-    color: red;
-}
 .table span[contenteditable] {
     white-space: nowrap;
     display: inline-block;
@@ -69,11 +73,17 @@
 /*
 * StopLoss & Targets
  */
-.greenBg {
+.green-text {
+    color: green;
+}
+.red-text {
+    color: red;
+}
+.green {
     color: #FFF;
     background: green;
 }
-.redBg {
+.red {
     color: #FFF;
     background: red;
 }
