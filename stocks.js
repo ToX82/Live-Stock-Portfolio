@@ -309,8 +309,8 @@
         function setUpdateInterval(time) {
             $('.progress').remove();
             $('.progressbar').append('<div style="animation-duration: ' + time + 's" class="progress"></div>');
-            $('.outdated-message').addClass('hide');
             var updateInterval = $interval(function() {
+                $('.outdated-message').addClass('hide');
                 var hour = new Date().getHours();
                 if (hour >= portfolio.settings.marketOpen && hour < portfolio.settings.marketClose) {
                     $('.progress').remove();
