@@ -47,7 +47,7 @@
                 portfolio.search = {};
                 return false;
             }
-            value = value.replace(' ', '+');
+            value = value.replace(/ /g, '+');
             $http({
                 method: 'POST',
                 url: 'proxy.php',
