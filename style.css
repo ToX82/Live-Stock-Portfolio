@@ -17,14 +17,13 @@
     display: none;
 }
 .card {
-    zoom: 0.7;
-    opacity: 0.9;
-}
-.card-header {
-    padding: 0.25rem 1.25rem;
+    zoom: 0.8;
 }
 .card-body {
     padding: 0.5rem 1.25rem;
+}
+.outdated {
+    background-color: rgba(198, 52, 52, 0.3);
 }
 
 /*
@@ -86,9 +85,6 @@
 .red {
     color: #FFF;
     background: red;
-}
-.outdated {
-    background-color: rgba(198, 52, 52, 0.3);
 }
 
 /*
