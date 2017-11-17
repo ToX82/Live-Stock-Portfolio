@@ -56,9 +56,9 @@
                 }
             }).then(function (response) {
                 var data = response.data.items;
-                $scope.portfolio.foundStocks = [];
+                portfolio.foundStocks = [];
                 $.each(data, function(index, item) {
-                    $scope.portfolio.foundStocks.push({
+                    portfolio.foundStocks.push({
                         sym: item.symbol,
                         name: item.name
                     });
@@ -83,7 +83,7 @@
 
             if (duplicate === false) {
                 portfolio.stocks.push(newStock);
-                $scope.portfolio.foundStocks = [];
+                portfolio.foundStocks = [];
                 $scope.search = '';
                 portfolio.dbWrite(portfolio.stocks);
                 portfolio.updateStocks(newStock, portfolio.stocks.length - 1);
@@ -290,6 +290,12 @@
          */
         portfolio.stocks = portfolio.dbRead();
         $scope.$watch('portfolio', function() {
+            portfolio.totals = {
+                'invested': 0,
+                'worth': 0,
+                'roi': 0,
+                'roiP': 0
+            };
             $.each(portfolio.stocks, function(index, stock) {
                 stock.invested = '';
                 stock.worth = '';
@@ -300,10 +306,18 @@
                     stock.worth = (stock.qty * stock.value).toFixed(2);
                     stock.roi = (stock.worth - stock.invested).toFixed(2);
                     stock.roiP = (((stock.worth) - (stock.invested)) / (stock.worth) * 100).toFixed(2);
+
+                    portfolio.totals = {
+                        'invested': parseFloat(portfolio.totals.invested) + parseFloat(stock.invested),
+                        'worth': parseFloat(portfolio.totals.worth) + parseFloat(stock.worth),
+                        'roi': parseFloat(portfolio.totals.roi) + parseFloat(stock.roi)
+                    };
                 }
             });
+            portfolio.totals.roiP = (portfolio.totals.worth) - (portfolio.totals.invested);
+            portfolio.totals.roiP = (portfolio.totals.roiP / portfolio.totals.worth * 100).toFixed(2);
 
-            $scope.portfolio.dbWrite(portfolio.stocks);
+            portfolio.dbWrite(portfolio.stocks);
         }, true);
 
         function setUpdateInterval(time) {
@@ -344,7 +358,7 @@
             }
         }
 
-        $scope.portfolio.updateStocks();
+        portfolio.updateStocks();
         updateInterval = setUpdateInterval(portfolio.settings.update);
         var hour = new Date().getHours();
         if (hour >= portfolio.settings.marketOpen && hour < portfolio.settings.marketClose) {

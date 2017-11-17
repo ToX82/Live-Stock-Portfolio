@@ -137,6 +137,16 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="font-weight-bold" colspan="10">Totale</td>
+                        <td>{{portfolio.totals.invested}} €</td>
+                        <td>{{portfolio.totals.worth}} €</td>
+                        <td class="green-text" ng-class="{'red-text': portfolio.totals.roi < 0}">{{portfolio.totals.roi}} €</td>
+                        <td class="green-text" ng-class="{'red-text': portfolio.totals.roiP < 0}">{{portfolio.totals.roiP}} %</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
